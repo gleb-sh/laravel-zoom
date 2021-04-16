@@ -98,9 +98,7 @@ class Request
     public function delete($end_point)
     {
         try {
-            return $this->client->delete($end_point, [
-                'headers' => $this->headers,
-            ]);
+            return $this->client->delete($end_point);
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 return $e->getResponse();
