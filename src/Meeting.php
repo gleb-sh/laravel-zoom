@@ -152,30 +152,28 @@ class Meeting extends Model
 
     public function getRecordByMeetingId(int $id)
     {
-        if (in_array('get', $this->methods)) {
-            $this->response = $this->client->get($this->getEndPoint() . "/" . $id . "/recordings");
-            if ($this->response->getStatusCode() == '200') {
+        $this->response = $this->client->get($this->getEndPoint() . "/" . $id . "/recordings");
+        if ($this->response->getStatusCode() == '200') {
 
-                $payload = $this->response->getContents();
+            $payload = $this->response->getContents();
 
-                $recordUrl = null;
+            $recordUrl = null;
 
-                foreach ($payload['recording_files'] as $recordingFile) {
-                    if ($recordingFile['recording_type'] === 'shared_screen_with_speaker_view') {
-                        $recordUrl = $recordingFile['download_url'];
+            foreach ($payload['recording_files'] as $recordingFile) {
+                if ($recordingFile['recording_type'] === 'shared_screen_with_speaker_view') {
+                    $recordUrl = $recordingFile['download_url'];
 
-                        break;
-                    }
+                    break;
                 }
-
-                if (!$recordUrl) {
-                    throw new Exception('No recordings for meeting');
-                }
-
-                return $recordUrl;
-            } else {
-                throw new Exception($this->response->getStatusCode() . ' status code');
             }
+
+            if (!$recordUrl) {
+                throw new Exception('No recordings for meeting');
+            }
+
+            return $recordUrl;
+        } else {
+            throw new Exception($this->response->getStatusCode() . ' status code');
         }
     }
 
