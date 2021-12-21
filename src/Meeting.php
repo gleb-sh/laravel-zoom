@@ -153,28 +153,28 @@ class Meeting extends Model
     public function getRecordByMeetingId(int $id)
     {
         $this->response = $this->client->get($this->getEndPoint() . "/" . $id . "/recordings");
-        if ($this->response->getStatusCode() == '200') {
 
-            $payload = $this->response->getContents();
-
-            $recordUrl = null;
-
-            foreach ($payload['recording_files'] as $recordingFile) {
-                if ($recordingFile['recording_type'] === 'shared_screen_with_speaker_view') {
-                    $recordUrl = $recordingFile['download_url'];
-
-                    break;
-                }
-            }
-
-            if (!$recordUrl) {
-                throw new Exception('No recordings for meeting');
-            }
-
-            return $recordUrl;
-        } else {
+        if ($this->response->getStatusCode() != '200') {
             throw new Exception($this->response->getStatusCode() . ' status code');
         }
+
+        $payload = $this->response->getContents();
+
+        $recordUrl = null;
+
+        foreach ($payload['recording_files'] as $recordingFile) {
+            if ($recordingFile['recording_type'] === 'shared_screen_with_speaker_view') {
+                $recordUrl = $recordingFile['download_url'];
+
+                break;
+            }
+        }
+
+        if (!$recordUrl) {
+            throw new Exception('No recordings for meeting');
+        }
+
+        return $recordUrl;
     }
 
     public function registrants()
