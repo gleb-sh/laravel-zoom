@@ -10,19 +10,19 @@ class Zoom
 {
     public $client;
 
-    public function __construct($type = 'Private')
+    public function __construct(array $config, $type = 'Private')
     {
         $function = 'boot'.ucfirst($type).'Application';
         if (method_exists($this, $function)) {
-            $this->$function();
+            $this->$function($config);
         } else {
             throw new Exception('Application Interface type not known');
         }
     }
 
-    public function bootPrivateApplication()
+    public function bootPrivateApplication(array $config)
     {
-        $this->client = (new PrivateApplication());
+        $this->client = (new PrivateApplication($config));
     }
 
     public function __get($key)

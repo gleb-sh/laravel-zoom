@@ -8,8 +8,8 @@ class PrivateApplication extends Base
 {
     protected $request;
 
-    public function __construct()
+    public function __construct(array $config)
     {
-        $this->request = (new Request)->bootPrivateApplication();
+        $this->request = (new Request)->bootPrivateApplication($config);
     }
 }

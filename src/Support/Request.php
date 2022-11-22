@@ -13,8 +13,11 @@ class Request
 
     private const DEFAULT_TIMEOUT = 10;
 
-    public function bootPrivateApplication()
+    private array $config;
+
+    public function bootPrivateApplication(array $config)
     {
+        $this->config = $config;
         $options = [
             'base_uri' => 'https://api.zoom.us/v2/',
             'headers' => [
@@ -33,12 +36,12 @@ class Request
     public function generateJWT()
     {
         $token = [
-            'iss' => config('zoom.api_key'),
+            'iss' => config($this->config['api_key']), // 'zoom.api_key'
             // The benefit of JWT is expiry tokens, we'll set this one to expire in 1 minute
             'exp' => time() + 60,
         ];
 
-        return JWT::encode($token, config('zoom.api_secret'));
+        return JWT::encode($token, config($this->config['api_secret'])); // zoom.api_secret
     }
 
     public function get($end_point, $query = '')
