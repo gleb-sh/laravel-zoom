@@ -30,10 +30,5 @@ class ZoomServiceProvider extends ServiceProvider
     {
         // Automatically apply the package configuration
         $this->mergeConfigFrom(__DIR__.'/../../config/config.php', 'zoom');
-
-        // Register the main class to use with the facade
-        $this->app->bind('zoom', function () {
-            return new Zoom();
-        });
     }
 }
